@@ -96,3 +96,33 @@ Reference
 
 Deploy on vSphere with Tanzu (Qi)
 ---------------------------------
+
+Use the following commands to set the default storage class. Skip this step if the
+default storage class has been set.
+
+.. code-block:: console
+    :linenos:
+
+    # https://anthonyspiteri.net/tanzu-no-default-storageclass/
+    $ kubectl config use-context liuqi
+    $ kubectl edit tanzukubernetescluster tkgs-cluster-16
+    # add the following content under spec/settings (same level as network setting)
+    ...
+    storage:
+      defaultClass: pacific-storage-policy
+    ...
+    $ kubectl config use-context tkgs-cluster-16
+    $ kubectl get sc
+
+Use the following commands to add the fstype parmeter to workaround PVC issue.
+Skip this step if this has been done.
+
+.. code-block:: console
+    :linenos:
+
+    # https://bugzilla.eng.vmware.com/show_bug.cgi?id=2764622
+    $ kubectl vsphere login --server=10.117.233.1 --vsphere-username administrator@vsphere.local --insecure-skip-tls-verify --tanzu-kubernetes-cluster-namespace=liuqi --tanzu-kubernetes-cluster-name=tkgs-cluster-33
+    $ kubectl get sc pacific-storage-policy -o yaml > tmp-sc.yaml
+    $ sed '/^parameters:.*/a\ \ csi.storage.k8s.io/fstype: "ext4"' -i tmp-sc.yaml
+    $ kubectl replace -f tmp-sc.yaml --force
+

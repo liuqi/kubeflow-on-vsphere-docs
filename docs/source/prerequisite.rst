@@ -117,8 +117,8 @@ Reference
     - `After installing OpenShift 4.x, what need to do if SSH keys are not copied to the nodes? <https://access.redhat.com/solutions/4725001>`_
     - `Create Users on OpenShift 4 <https://medium.com/kubelancer-private-limited/create-users-on-openshift-4-dc5cfdf85661>`_
 
-vSphere with Tanzu Deployment (Qi)
-----------------------------------
+vSphere with Tanzu Deployment
+-----------------------------
 From `Kubeflow documentation <https://github.com/kubeflow/manifests/tree/v1.4-branch#prerequisites>`_, the prerequisties for Kubeflow 1.4 installation are
 
 - ``Kubernetes`` (tested with version ``1.19``) with a default ``StorageClass``
@@ -157,9 +157,16 @@ The following is an example to deploy TKG cluster v1.19 on vSphere with Tanzu.
     # Wait for the cluster ready
     $ kubectl get tanzukubernetesclusters
 
-.. seealso::
+.. note::
+   Refer to the following document to synchronize the local content library for TKG v1.19
 
    `Create, Secure, and Synchronize a Local Content Library for Tanzu Kubernetes releases <https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-E8C37D8A-E261-44F0-9947-45ABAB526CF3.html>`_
+
+Use the following commands to patch API server and set docker hub credentials
+
+XXX
+
+A script is also provided to perform the above jobs.
 
 Project Thunder Deployment
 --------------------------
