@@ -1,21 +1,21 @@
-Model Serving (Harper)
-======================
+Model Serving
+=============
 
 .. seealso::
 
    `Link to the KFServing summary notes <https://dashing-axolotl-95d.notion.site/KFServing-98ca85ba483841cc84697512fffef916>`_
 
 
-3.1 Model Serving Basics
-------------------------
+Model Serving Basics
+--------------------
 
-3.1.1 Background
-++++++++++++++++
+Background
+++++++++++
 
-[To do]
+XXX
 
-3.1.2 Overview
-+++++++++++++++
+Overview
+++++++++
 
 .. figure:: ./figs/model-serving-architecture.png
    :width: 1024
@@ -24,13 +24,13 @@ Model Serving (Harper)
 
    Figure 1 - The Workflow of Model Serving.
 
-[To do]
+XXX
 
-3.2 KServe Basics
------------------
+KServe Basics
+-------------
 
-3.2.1 The Overview of Kserve
-++++++++++++++++++++++++++++
+Overview
+++++++++
 
 KServe is a standard Model Inference Platform on Kubernetes, built for highly scalable use cases. KServe provides a Kubernetes Custom Resource Definition for 
 serving machine learning (ML) models on arbitrary frameworks. It encapsulates the complexity of autoscaling, networking, health checking, 
@@ -43,10 +43,10 @@ and server configuration to bring cutting edge serving features like GPU Autosca
 
    Figure 2 - The Overview of Kserve.
 
-3.2.2 The Architecture of Kserve
-++++++++++++++++++++++++++++++++
+Architecture
+++++++++++++
 
-[To do]
+XXX
 
 Control Plane
 ^^^^^^^^^^^^^
@@ -62,7 +62,7 @@ enable autoscaling based on incoming request workload including scaling down to 
    Figure 3 - The Control Plane of Kserve.
 
 Data Plane
-^^^^^^^^^^^^
+^^^^^^^^^^
 
 The Kserve data plane architecture is described as figure 4. 
 
@@ -84,45 +84,28 @@ The Kserve data plane architecture is described as figure 4.
 * Transformer: The transformer enables users to define a pre and post processing step before the prediction and explanation workflows. KFServing provides out-of-the-box transformers like Feast
 
 
-3.2.3 KServe's Services and Features [To do]
-++++++++++++++++++++++++++++++++++++++++++++
+KServe's Services and Features
+++++++++++++++++++++++++++++++
 
-Single Model Serving
-^^^^^^^^^^^^^^^^^^^^
+XXX
 
-Multi Model Serving
-^^^^^^^^^^^^^^^^^^^^
-
-Deploy InferenceService with Transformers
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Deploy InferenceService with Explainer
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Deploy InferenceService with storage
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Model Monitoring
-^^^^^^^^^^^^^^^^
-
-Autoscaling
-^^^^^^^^^^^
-
-Request Batching
-^^^^^^^^^^^^^^^^
-
-Payload Logging
-^^^^^^^^^^^^^^^
-
-Kafka
-^^^^^
+* Single Model Serving
+* Multi Model Serving
+* Deploy InferenceService with Transformers
+* Deploy InferenceService with Explainer
+* Deploy InferenceService with storage
+* Model Monitoring
+* Autoscaling
+* Request Batching
+* Payload Logging
+* Kafka
 
 
-3.2 KServe Using
-----------------
+Using KServe
+------------
 
-3.2.1 Environments
-++++++++++++++++++
+Environments
+++++++++++++
 
 .. csv-table:: Table 1: Environment settings
    :header: "Cluster", "Kubeflow", "KFServing", "Demo Link" 
@@ -132,13 +115,14 @@ Kafka
    "OpenShift with kubernetes 1.8", kubeflow 1.4, KFserving v0.6.0, `Demo Link 2 <https://console-openshift-console.apps.ocp4-cluster-001.liuqi.io/k8s/cluster/projects>`_
    "vSphere TKG with kubernetes 1.8", kubeflow 1.4, KFserving v0.6.0, `Demo Link 3 <http://127.0.0.1:8080/?ns=kubeflow-user-example-com>`_
 
-3.2.2 Setup and Applications on OpenShift
-+++++++++++++++++++++++++++++++++++++++++
-[To do]
+Setup and Applications on OpenShift
++++++++++++++++++++++++++++++++++++
+
+XXX
 
 
-3.2.3 Setup and Applications on vSphere TKG
-+++++++++++++++++++++++++++++++++++++++++++
+Setup and Applications on vSphere TKG
++++++++++++++++++++++++++++++++++++++
 
 Login vSphere TKG
 ^^^^^^^^^^^^^^^^^
@@ -154,7 +138,7 @@ Login vSphere TKG
 
 
 Applications on vSphere TKG
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Single Model InferenceService:
 
@@ -180,14 +164,14 @@ Applications on vSphere TKG
 
    "Sklearn", "Pass", "On a stick!"
    "Tensorflow", "Pass", "If we took the bones out,"
-   "PyTorch", "Not Pass [insufficient CPU]", "On a stick!"
+   "PyTorch", "Pass", "On a stick!"
    "Paddle", "Pass", "On a stick!"
    "XGBoost", "Pass", "On a stick!"
    "LightGBM", "Pass", "On a stick!"
    "Transformer", "Not test", "On a stick!"
    "Rollout", "Pass", "On a stick!"
 
-* Custom Model InferenceService: [To do]
+* Custom Model InferenceService: XXX
 
 .. code-block:: bash
     :linenos:
@@ -198,52 +182,48 @@ Applications on vSphere TKG
     $ inferenceservice.serving.kserve.io/sklearn-iris created
 
 
-* Deploy InferenceService with Cloud/PVC storage: [To do]
+* Deploy InferenceService with Cloud/PVC storage: XXX
 
-* Using KServe Python SDK: [To do]
+* Using KServe Python SDK: XXX
 
 
-3.3 KServe Extension [advance]
-------------------------------
+Advanced KServe
+---------------
 
-3.3.1 Kserve Python SDK
-+++++++++++++++++++++++
+Kserve Python SDK
++++++++++++++++++
 
-Overview
-^^^^^^^^
+#. Overview
 
-Python SDK for KFServing Server and Client
+   Python SDK for KFServing Server and Client
 
-.. code-block:: bash
-    :linenos:
+   .. code-block:: bash
+       :linenos:
 
-    # Installation
-    pip install kfserving
+       # Installation
+       pip install kfserving
 
-    # Install via Setuptools
-    sudo python setup.py install    # for all user
-    or 
-    python setup.py install --user
+       # Install via Setuptools
+       sudo python setup.py install    # for all user
+       or
+       python setup.py install --user
 
-KFServing Server
-^^^^^^^^^^^^^^^^^^
-KFServing's python server libraries implement a standardized KFServing library that is extended by model serving frameworks such as Scikit Learn, XGBoost and 
-PyTorch. It encapsulates data plane API definitions and storage retrieval for models
+#. KFServing Server
 
-KFServing Client
-^^^^^^^^^^^^^^^^^^
+   KFServing's python server libraries implement a standardized KFServing library that is extended by model serving frameworks such as Scikit Learn, XGBoost and PyTorch. It encapsulates data plane API definitions and storage retrieval for models
 
-KFServing's python client interacts with KFServing control plane APIs for executing operations on a remote KFServing cluster, such as creating, 
-patching and deleting of a InferenceService instance
+#. KFServing Client
 
-API Groups:
+   KFServing's python client interacts with KFServing control plane APIs for executing operations on a remote KFServing cluster, such as creating, patching and deleting of a InferenceService instance
 
-* KnativeAddressable
-* KnativeCondition
-* KnativeURL
-* V1beta1Batcher
-* V1beta1ComponentExtensionSpec
-* V1beta1CustomExplainer
-* V1beta1InferenceService
-* V1beta1InferenceServiceList
-* and etc...
+   API Groups:
+
+   * KnativeAddressable
+   * KnativeCondition
+   * KnativeURL
+   * V1beta1Batcher
+   * V1beta1ComponentExtensionSpec
+   * V1beta1CustomExplainer
+   * V1beta1InferenceService
+   * V1beta1InferenceServiceList
+   * and etc...
