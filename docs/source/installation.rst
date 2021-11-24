@@ -140,6 +140,25 @@ Deploy on vSphere with Tanzu
 
 #. Fix PSP issues for example namespace
 
+   .. code-block:: console
+      :linenos:
+
+      $ cat << EOF | kubectl apply -f -
+      kind: RoleBinding
+      apiVersion: rbac.authorization.k8s.io/v1
+      metadata:
+        name: rb-all-sa_ns-kubeflow-user-example-com
+        namespace: kubeflow-user-example-com
+      roleRef:
+        kind: ClusterRole
+        name: psp:vmware-system-privileged
+        apiGroup: rbac.authorization.k8s.io
+      subjects:
+      - kind: Group
+        apiGroup: rbac.authorization.k8s.io
+        name: system:serviceaccounts:kubeflow-user-example-com
+      EOF
+
 Deploy on OpenShift
 -------------------
 
