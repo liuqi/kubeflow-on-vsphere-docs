@@ -5,7 +5,6 @@ Model Serving
 
    `Link to the KFServing summary notes <https://dashing-axolotl-95d.notion.site/KFServing-98ca85ba483841cc84697512fffef916>`_
 
-
 Model Serving Basics
 --------------------
 
@@ -128,13 +127,13 @@ Login vSphere TKG
 ^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
-    :linenos:
+   :linenos:
 
-    # login your vSphere TKG, 密码 Admin!23
-    $ kubectl vsphere login --server=10.117.233.1 --vsphere-username administrator@vsphere.local --insecure-skip-tls-verify --tanzu-kubernetes-cluster-namespace=liuqi --tanzu-kubernetes-cluster-name=tkgs-cluster-31
+   # login your vSphere TKG, 密码 Admin!23
+   $ kubectl vsphere login --server=10.117.233.1 --vsphere-username administrator@vsphere.local --insecure-skip-tls-verify --tanzu-kubernetes-cluster-namespace=liuqi --tanzu-kubernetes-cluster-name=tkgs-cluster-31
 
-    # export your vSphere TKG port, and login kubeflow ui with username (user@example.com) and password (12341234)
-    $ kubectl port-forward svc/istio-ingressgateway -n istio-system 8080:80
+   # export your vSphere TKG port, and login kubeflow ui with username (user@example.com) and password (12341234)
+   $ kubectl port-forward svc/istio-ingressgateway -n istio-system 8080:80
 
 
 Applications on vSphere TKG
@@ -143,20 +142,19 @@ Applications on vSphere TKG
 * Single Model InferenceService:
 
 .. code-block:: console
-    :linenos:
+   :linenos:
 
-    # Deploy a model inferenceservice [demo: sklearn-iris <sert a link>]
-    kubectl apply -f sklearn.yaml
-    Output
-    $ inferenceservice.serving.kserve.io/sklearn-iris created
+   # Deploy a model inferenceservice [demo: sklearn-iris <sert a link>]
+   kubectl apply -f sklearn.yaml
+   Output
+   $ inferenceservice.serving.kserve.io/sklearn-iris created
 
-    # Run a prediction with curl
-    MODEL_NAME=sklearn-iris
-    INPUT_PATH=@./iris-input.json
-    SESSION=[login your kubeflow ui find the request header' Cookie <https://developer.chrome.com/docs/devtools/storage/cookies/>]
-    SERVICE_HOSTNAME=$(kubectl get -n kfserving-samples inferenceservice ${MODEL_NAME} -o jsonpath='{.status.url}' | cut -d "/" -f 3)
-    curl -v -H "Host: ${SERVICE_HOSTNAME}" -H "Cookie: authservice_session=${SESSION}" http://127.0.0.1:8080/v1/models/${MODEL_NAME}:predict -d ${INPUT_PATH}
-
+   # Run a prediction with curl
+   MODEL_NAME=sklearn-iris
+   INPUT_PATH=@./iris-input.json
+   SESSION=[login your kubeflow ui find the request header' Cookie <https://developer.chrome.com/docs/devtools/storage/cookies/>]
+   SERVICE_HOSTNAME=$(kubectl get -n kfserving-samples inferenceservice ${MODEL_NAME} -o jsonpath='{.status.url}' | cut -d "/" -f 3)
+   curl -v -H "Host: ${SERVICE_HOSTNAME}" -H "Cookie: authservice_session=${SESSION}" http://127.0.0.1:8080/v1/models/${MODEL_NAME}:predict -d ${INPUT_PATH}
 
 .. csv-table:: Table 2: Out-of-the-box Predictor
    :header: "Model Name", "Verification", "Description"
@@ -174,13 +172,12 @@ Applications on vSphere TKG
 * Custom Model InferenceService: XXX
 
 .. code-block:: bash
-    :linenos:
+   :linenos:
 
-    # Build a model server with docker ➡️ Create the InferenceService with yaml file ➡️  Run a prediction ➡️ Delete the InferenceService
-    kubectl apply -f sklearn.yaml
-    Output
-    $ inferenceservice.serving.kserve.io/sklearn-iris created
-
+   # Build a model server with docker ➡️ Create the InferenceService with yaml file ➡️  Run a prediction ➡️ Delete the InferenceService
+   kubectl apply -f sklearn.yaml
+   Output
+   $ inferenceservice.serving.kserve.io/sklearn-iris created
 
 * Deploy InferenceService with Cloud/PVC storage: XXX
 
@@ -198,15 +195,15 @@ Kserve Python SDK
    Python SDK for KFServing Server and Client
 
    .. code-block:: bash
-       :linenos:
+      :linenos:
 
-       # Installation
-       pip install kfserving
+      # Installation
+      pip install kfserving
 
-       # Install via Setuptools
-       sudo python setup.py install    # for all user
-       or
-       python setup.py install --user
+      # Install via Setuptools
+      sudo python setup.py install    # for all user
+      or
+      python setup.py install --user
 
 #. KFServing Server
 
