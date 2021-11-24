@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Model Serving &mdash; Kubeflow on vSphere 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Kubeflow Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Kubeflow on vSphere
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="prerequisite.html">Prerequisite (Kubernetes Cluster Prepartion)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Kubeflow Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Model Serving</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#model-serving-basics">Model Serving Basics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#background">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#kserve-basics">KServe Basics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#architecture">Architecture</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#control-plane">Control Plane</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data-plane">Data Plane</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#kserve-s-services-and-features">KServe’s Services and Features</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#using-kserve">Using KServe</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#environments">Environments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#setup-and-applications-on-vsphere-tkg">Setup and Applications on vSphere TKG</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#login-vsphere-tkg">Login vSphere TKG</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#applications-on-vsphere-tkg">Applications on vSphere TKG</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#setup-and-applications-on-openshift">Setup and Applications on OpenShift</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-kserve">Advanced KServe</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#kserve-python-sdk">Kserve Python SDK</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Kubeflow on vSphere</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Model Serving</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/model-serving.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="model-serving">
+<h1>Model Serving<a class="headerlink" href="#model-serving" title="Permalink to this headline"></a></h1>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://dashing-axolotl-95d.notion.site/KFServing-98ca85ba483841cc84697512fffef916">Link to the KFServing summary notes</a></p>
+</div>
+<div class="section" id="model-serving-basics">
+<h2>Model Serving Basics<a class="headerlink" href="#model-serving-basics" title="Permalink to this headline"></a></h2>
+<div class="section" id="background">
+<h3>Background<a class="headerlink" href="#background" title="Permalink to this headline"></a></h3>
+<p>Most of the attention paid to machine learning has been devoted to algorithm development.
+However, models are not created for the sake of their creation, they are created
+to be put into production. Usually when people talk about taking a model “to
+production,” they mean performing inference. A complete inference solution seeks to provide serving,
+monitoring, and updating functionality. This chapter will focus on the model serving, there are advantages
+about model serving as following,</p>
+<ul class="simple">
+<li><p>Helping to standardize model serving across orgs with unified data plane and pre-built model servers</p></li>
+<li><p>A single way to deploy, monitor inference services/server, and scale inference workload</p></li>
+<li><p>Dramatically shortening time for data scientists to deploy models to production</p></li>
+</ul>
+</div>
+<div class="section" id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Permalink to this headline"></a></h3>
+<p>Machine learning model inference is the process of taking an existing trained model and
+using new data as input to produce model output such as a classification (e.g., “label”),
+or a continuous real-valued number from a regression model (e.g., “house price”).
+The Figure1 shows the architecture of the model inference,</p>
+<div class="figure align-center" id="id2">
+<a class="reference internal image-reference" href="_images/model-inference.png"><img alt="_images/model-inference.png" src="_images/model-inference.png" style="width: 630.0px; height: 479.49999999999994px;" /></a>
+<p class="caption"><span class="caption-text">Figure 1 - The Workflow of Model Serving.</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</div>
+</div>
+</div>
+<div class="section" id="kserve-basics">
+<h2>KServe Basics<a class="headerlink" href="#kserve-basics" title="Permalink to this headline"></a></h2>
+<div class="section" id="id1">
+<h3>Overview<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<p>KServe is a standard Model Inference Platform on Kubernetes, built for highly scalable use cases. KServe provides a Kubernetes Custom Resource Definition for
+serving machine learning (ML) models on arbitrary frameworks. It encapsulates the complexity of autoscaling, networking, health checking,
+and server configuration to bring cutting edge serving features like GPU Autoscaling, Scale to Zero, and Canary Rollouts to your ML deployments.</p>
+<div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="_images/kserve-overview.png"><img alt="_images/kserve-overview.png" src="_images/kserve-overview.png" style="width: 614.4px; height: 288.0px;" /></a>
+<p class="caption"><span class="caption-text">Figure 2 - The Overview of Kserve.</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
+</div>
+</div>
+<div class="section" id="architecture">
+<h3>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline"></a></h3>
+<div class="section" id="control-plane">
+<h4>Control Plane<a class="headerlink" href="#control-plane" title="Permalink to this headline"></a></h4>
+<p>Responsible for reconciling the InferenceService custom resources. It creates the Knative serverless deployment for predictor, transformer, explainer to
+enable autoscaling based on incoming request workload including scaling down to zero when no traffic is received.</p>
+<div class="figure align-center" id="id4">
+<a class="reference internal image-reference" href="_images/control-plane.png"><img alt="_images/control-plane.png" src="_images/control-plane.png" style="width: 700.0px; height: 445.2px;" /></a>
+<p class="caption"><span class="caption-text">Figure 3 - The Control Plane of Kserve.</span><a class="headerlink" href="#id4" title="Permalink to this image"></a></p>
+</div>
+</div>
+<div class="section" id="data-plane">
+<h4>Data Plane<a class="headerlink" href="#data-plane" title="Permalink to this headline"></a></h4>
+<p>The Kserve data plane architecture is described as figure 4.</p>
+<div class="figure align-center" id="id5">
+<a class="reference internal image-reference" href="_images/data-plane.png"><img alt="_images/data-plane.png" src="_images/data-plane.png" style="width: 560.0px; height: 177.79999999999998px;" /></a>
+<p class="caption"><span class="caption-text">Figure 4 - The Data Plane of Kserve.</span><a class="headerlink" href="#id5" title="Permalink to this image"></a></p>
+</div>
+<ul class="simple">
+<li><p>Endpoint: InferenceServers are divided into two endpoints: “default” and “canary”. The endpoints allow users to safely make changes using the Pinned and Canary rollout strategies</p></li>
+<li><p>Component: Each endpoint is composed of multiple components: “predictor”, “explainer”, and “transformer”. The only required component is the predictor, which is the core of the system</p></li>
+<li><p>Predictor: The predictor is the workhorse of the InferenceService. It is simply a model and a model server that makes it available at a network endpoint</p></li>
+<li><p>Explainer: The explainer enables an optional alternate data plane that provides model explanations in addition to predictions. KFServing provides out-of-the-box explainers like Alibi.</p></li>
+<li><p>Transformer: The transformer enables users to define a pre and post processing step before the prediction and explanation workflows. KFServing provides out-of-the-box transformers like Feast</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="kserve-s-services-and-features">
+<h3>KServe’s Services and Features<a class="headerlink" href="#kserve-s-services-and-features" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Single Model Serving</p></li>
+<li><p>Multi Model Serving</p></li>
+<li><p>Deploy InferenceService with Transformers</p></li>
+<li><p>Deploy InferenceService with Explainer</p></li>
+<li><p>Deploy InferenceService with storage</p></li>
+<li><p>Model Monitoring</p></li>
+<li><p>Autoscaling</p></li>
+<li><p>Request Batching</p></li>
+<li><p>Payload Logging</p></li>
+<li><p>Kafka</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="using-kserve">
+<h2>Using KServe<a class="headerlink" href="#using-kserve" title="Permalink to this headline"></a></h2>
+<div class="section" id="environments">
+<h3>Environments<a class="headerlink" href="#environments" title="Permalink to this headline"></a></h3>
+<table class="colwidths-given docutils align-default" id="id6">
+<caption><span class="caption-text">Table 1: Environment settings</span><a class="headerlink" href="#id6" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Cluster</p></th>
+<th class="head"><p>Kubeflow</p></th>
+<th class="head"><p>KFServing</p></th>
+<th class="head"><p>Demo Link</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AWS EKS with kubernetes 1.8</p></td>
+<td><p>kubeflow 1.2</p></td>
+<td><p>KFserving v0.4.1</p></td>
+<td><p><a class="reference external" href="http://549e5b50-istiosystem-istio-2af2-834352904.us-west-1.elb.amazonaws.com/dex/auth/local?req=itknagh4dq35xqbe5egxbsmid">Demo Link 1</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>OpenShift with kubernetes 1.8</p></td>
+<td><p>kubeflow 1.4</p></td>
+<td><p>KFserving v0.6.0</p></td>
+<td><p><a class="reference external" href="https://console-openshift-console.apps.ocp4-cluster-001.liuqi.io/k8s/cluster/projects">Demo Link 2</a></p></td>
+</tr>
+<tr class="row-even"><td><p>vSphere TKG with kubernetes 1.8</p></td>
+<td><p>kubeflow 1.4</p></td>
+<td><p>KFserving v0.6.0</p></td>
+<td><p><a class="reference external" href="http://127.0.0.1:8080/?ns=kubeflow-user-example-com">Demo Link 3</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="setup-and-applications-on-vsphere-tkg">
+<h3>Setup and Applications on vSphere TKG<a class="headerlink" href="#setup-and-applications-on-vsphere-tkg" title="Permalink to this headline"></a></h3>
+<div class="section" id="login-vsphere-tkg">
+<h4>Login vSphere TKG<a class="headerlink" href="#login-vsphere-tkg" title="Permalink to this headline"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="lineno">1 </span><span class="c1"># login your vSphere TKG, 密码 Admin!23</span>
+<span class="lineno">2 </span>$ kubectl vsphere login --server<span class="o">=</span><span class="m">10</span>.117.233.1 --vsphere-username administrator@vsphere.local --insecure-skip-tls-verify --tanzu-kubernetes-cluster-namespace<span class="o">=</span>liuqi --tanzu-kubernetes-cluster-name<span class="o">=</span>tkgs-cluster-31
+<span class="lineno">3 </span>
+<span class="lineno">4 </span><span class="c1"># export your vSphere TKG port, and login kubeflow ui with username (user@example.com) and password (12341234)</span>
+<span class="lineno">5 </span>$ kubectl port-forward svc/istio-ingressgateway -n istio-system <span class="m">8080</span>:80
+</pre></div>
+</div>
+</div>
+<div class="section" id="applications-on-vsphere-tkg">
+<h4>Applications on vSphere TKG<a class="headerlink" href="#applications-on-vsphere-tkg" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Single Model InferenceService:</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="c1"># Deploy a model inferenceservice [demo: &lt;sert a link&gt;]</span>
+<span class="lineno"> 2 </span>kubectl apply -f sklearn.yaml -n kubeflow-user-example-com
+<span class="lineno"> 3 </span><span class="c1"># Output</span>
+<span class="lineno"> 4 </span>$ inferenceservice.serving.kserve.io/sklearn-iris created
+<span class="lineno"> 5 </span>
+<span class="lineno"> 6 </span><span class="c1"># Run a prediction with curl</span>
+<span class="lineno"> 7 </span><span class="nv">MODEL_NAME</span><span class="o">=</span>sklearn-iris
+<span class="lineno"> 8 </span><span class="nv">INPUT_PATH</span><span class="o">=</span>@./iris-input.json
+<span class="lineno"> 9 </span><span class="nv">SESSION</span><span class="o">=[</span>login your kubeflow ui find the request header Cookie<span class="o">]</span>
+<span class="lineno">10 </span><span class="nv">SERVICE_HOSTNAME</span><span class="o">=</span><span class="k">$(</span>kubectl get -n kfserving-samples inferenceservice <span class="si">${</span><span class="nv">MODEL_NAME</span><span class="si">}</span> -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.url}&#39;</span> <span class="p">|</span> cut -d <span class="s2">&quot;/&quot;</span> -f <span class="m">3</span><span class="k">)</span>
+<span class="lineno">11 </span>curl -v -H <span class="s2">&quot;Host: </span><span class="si">${</span><span class="nv">SERVICE_HOSTNAME</span><span class="si">}</span><span class="s2">&quot;</span> -H <span class="s2">&quot;Cookie: authservice_session=</span><span class="si">${</span><span class="nv">SESSION</span><span class="si">}</span><span class="s2">&quot;</span> http://127.0.0.1:8080/v1/models/<span class="si">${</span><span class="nv">MODEL_NAME</span><span class="si">}</span>:predict -d <span class="si">${</span><span class="nv">INPUT_PATH</span><span class="si">}</span>
+<span class="lineno">12 </span><span class="c1"># Output</span>
+<span class="lineno">13 </span>*   Trying <span class="m">127</span>.0.0.1:8080...
+<span class="lineno">14 </span>* TCP_NODELAY <span class="nb">set</span>
+<span class="lineno">15 </span>* Connected to <span class="m">127</span>.0.0.1 <span class="o">(</span><span class="m">127</span>.0.0.1<span class="o">)</span> port <span class="m">8080</span> <span class="o">(</span><span class="c1">#0)</span>
+<span class="lineno">16 </span>&gt; POST /v1/models/sklearn-iris:predict HTTP/1.1
+<span class="lineno">17 </span>&gt; Host: sklearn-iris.kubeflow-user-example-com.example.com
+<span class="lineno">18 </span>&gt; User-Agent: curl/7.67.0
+<span class="lineno">19 </span>&gt; Accept: */*
+<span class="lineno">20 </span>&gt; Cookie: <span class="nv">authservice_session</span><span class="o">=</span>MTYzNzc0NjkzOXxOd3dBTkVveU16Y3pXa0l6UkVKRVVGSkRWMVpSU2xveVIxQlZTRk0xUzBKWFFraEhNa2hFVkZaTVNGSlJURVJSVDA1TFJVcFFWVkU9fEFCFhhb2MHqcysV7xOCPIYkbgvA41mGoWRhb8e4waLa
+<span class="lineno">21 </span>&gt; Content-Length: <span class="m">76</span>
+<span class="lineno">22 </span>&gt; Content-Type: application/x-www-form-urlencoded
+<span class="lineno">23 </span>&gt;
+<span class="lineno">24 </span>* upload completely sent off: <span class="m">76</span> out of <span class="m">76</span> bytes
+<span class="lineno">25 </span>* Mark bundle as not supporting multiuse
+<span class="lineno">26 </span>&lt; HTTP/1.1 <span class="m">200</span> OK
+<span class="lineno">27 </span>&lt; content-length: <span class="m">23</span>
+<span class="lineno">28 </span>&lt; content-type: application/json<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>UTF-8
+<span class="lineno">29 </span>&lt; date: Wed, <span class="m">24</span> Nov <span class="m">2021</span> <span class="m">17</span>:29:14 GMT
+<span class="lineno">30 </span>&lt; server: istio-envoy
+<span class="lineno">31 </span>&lt; x-envoy-upstream-service-time: <span class="m">30</span>
+<span class="lineno">32 </span>&lt;
+<span class="lineno">33 </span>* Connection <span class="c1">#0 to host 127.0.0.1 left intact</span>
+<span class="lineno">34 </span><span class="o">{</span><span class="s2">&quot;predictions&quot;</span>: <span class="o">[</span><span class="m">1</span>, <span class="m">1</span><span class="o">]}</span>
+</pre></div>
+</div>
+<p>There are the supported ML frameworks and fuctions in KServe:</p>
+<table class="colwidths-given docutils align-default" id="id7">
+<caption><span class="caption-text">Table 2: Out-of-the-box Predictor</span><a class="headerlink" href="#id7" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 30%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Model Name</p></th>
+<th class="head"><p>Verification</p></th>
+<th class="head"><p>Performance</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Sklearn</p></td>
+<td><p>Pass</p></td>
+<td><p>xxx</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tensorflow</p></td>
+<td><p>Pass</p></td>
+<td><p>xxx</p></td>
+</tr>
+<tr class="row-even"><td><p>PyTorch</p></td>
+<td><p>Pass</p></td>
+<td><p>xxx</p></td>
+</tr>
+<tr class="row-odd"><td><p>Paddle</p></td>
+<td><p>Pass</p></td>
+<td><p>xxx</p></td>
+</tr>
+<tr class="row-even"><td><p>XGBoost</p></td>
+<td><p>Pass</p></td>
+<td><p>xxx</p></td>
+</tr>
+<tr class="row-odd"><td><p>LightGBM</p></td>
+<td><p>Pass</p></td>
+<td><p>xxx</p></td>
+</tr>
+<tr class="row-even"><td><p>Rollout</p></td>
+<td><p>Pass</p></td>
+<td><p>xxx</p></td>
+</tr>
+<tr class="row-odd"><td><p>Transformer</p></td>
+<td><p>Not test</p></td>
+<td><p>xxx</p></td>
+</tr>
+<tr class="row-even"><td><p>and so on</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>Custom Model InferenceService:</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="c1"># Run the training models on your local machine and server with kfserving.KFModel</span>
+<span class="lineno"> 2 </span><span class="c1">#[demo: insert a link]</span>
+<span class="lineno"> 3 </span><span class="c1"># Build a model server with docker</span>
+<span class="lineno"> 4 </span>docker build -t <span class="o">{</span>username<span class="o">}</span>/kfserving-custom-model ./model-server
+<span class="lineno"> 5 </span><span class="c1"># Push the container to docker registry</span>
+<span class="lineno"> 6 </span>docker push <span class="o">{</span>username<span class="o">}</span>/kfserving-custom-model
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="c1"># Create the InferenceService with yaml file</span>
+<span class="lineno"> 9 </span>kubectl apply -f custom.yaml
+<span class="lineno">10 </span><span class="c1"># Output</span>
+<span class="lineno">11 </span>$ inferenceservice.serving.kserve.io/sklearn-iris created
+<span class="lineno">12 </span><span class="c1"># Run a prediction</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Using KServe Python SDK: XXX</p></li>
+<li><p>Deploy InferenceService with Cloud/PVC storage: XXX</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="setup-and-applications-on-openshift">
+<h3>Setup and Applications on OpenShift<a class="headerlink" href="#setup-and-applications-on-openshift" title="Permalink to this headline"></a></h3>
+<p>XXX</p>
+</div>
+</div>
+<div class="section" id="advanced-kserve">
+<h2>Advanced KServe<a class="headerlink" href="#advanced-kserve" title="Permalink to this headline"></a></h2>
+<div class="section" id="kserve-python-sdk">
+<h3>Kserve Python SDK<a class="headerlink" href="#kserve-python-sdk" title="Permalink to this headline"></a></h3>
+<ol class="arabic">
+<li><p>Overview</p>
+<p>Python SDK for KFServing Server and Client</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="lineno">1 </span><span class="c1"># Installation</span>
+<span class="lineno">2 </span>pip install kfserving
+<span class="lineno">3 </span>
+<span class="lineno">4 </span><span class="c1"># Install via Setuptools</span>
+<span class="lineno">5 </span>sudo python setup.py install    <span class="c1"># for all user</span>
+<span class="lineno">6 </span>or
+<span class="lineno">7 </span>python setup.py install --user
+</pre></div>
+</div>
+</li>
+<li><p>KFServing Server</p>
+<p>KFServing’s python server libraries implement a standardized KFServing library that is extended by model serving frameworks such as Scikit Learn, XGBoost and PyTorch. It encapsulates data plane API definitions and storage retrieval for models</p>
+</li>
+<li><p>KFServing Client</p>
+<p>KFServing’s python client interacts with KFServing control plane APIs for executing operations on a remote KFServing cluster, such as creating, patching and deleting of a InferenceService instance</p>
+<p>API Groups:</p>
+<ul class="simple">
+<li><p>KnativeAddressable</p></li>
+<li><p>KnativeCondition</p></li>
+<li><p>KnativeURL</p></li>
+<li><p>V1beta1Batcher</p></li>
+<li><p>V1beta1ComponentExtensionSpec</p></li>
+<li><p>V1beta1CustomExplainer</p></li>
+<li><p>V1beta1InferenceService</p></li>
+<li><p>V1beta1InferenceServiceList</p></li>
+<li><p>and etc…</p></li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Kubeflow Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, VMware.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
