@@ -1,11 +1,11 @@
 Prerequisite
 ============
 
-OpenShift Deployment (Yajing)
------------------------------
+OpenShift Deployment
+--------------------
 
 .. seealso::
-    
+
     `Installing a cluster on vSphere <https://docs.openshift.com/container-platform/4.8/installing/installing_vsphere/installing-vsphere-installer-provisioned.html>`_
 
 Networking requirements: Required IP Addresses
@@ -62,7 +62,7 @@ Workflow to deploy OpenShift 4.8 via IPI on vSphere
 
 .. code-block:: bash
     :linenos:
- 
+
     # Deploy the cluster according to install-config.yaml
     # --dir must be the one where the install-config.yaml file is located
     openshift-install create cluster --dir /home/redcloud/ipi/ipi/
@@ -75,7 +75,7 @@ Workflow to deploy OpenShift 4.8 via IPI on vSphere
 
 .. code-block:: bash
     :linenos:
-    
+
     #check if all nodes are ready
     oc get nodes
     #check if all pods are running or completed 
@@ -162,11 +162,9 @@ The following is an example to deploy TKG cluster v1.19 on vSphere with Tanzu.
 
    `Create, Secure, and Synchronize a Local Content Library for Tanzu Kubernetes releases <https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-E8C37D8A-E261-44F0-9947-45ABAB526CF3.html>`_
 
-Use the following commands to patch API server and set docker hub credentials
+(Optional, XXX) You may need to patch API server and set docker hub credentials
 
-XXX
-
-A script is also provided to perform the above jobs.
+:download:`A script <tkg.zsh>` is also provided to perform the above jobs.
 
 Project Thunder Deployment
 --------------------------
