@@ -10,7 +10,7 @@ Model Serving (Harper)
 ------------------------
 
 3.1.1 Background
-+++++++++++++++
+++++++++++++++++
 
 [To do]
 
@@ -27,10 +27,10 @@ Model Serving (Harper)
 [To do]
 
 3.2 KServe Basics
--------------
+-----------------
 
 3.2.1 The Overview of Kserve
-+++++++++++
+++++++++++++++++++++++++++++
 
 KServe is a standard Model Inference Platform on Kubernetes, built for highly scalable use cases. KServe provides a Kubernetes Custom Resource Definition for 
 serving machine learning (ML) models on arbitrary frameworks. It encapsulates the complexity of autoscaling, networking, health checking, 
@@ -44,12 +44,12 @@ and server configuration to bring cutting edge serving features like GPU Autosca
    Figure 2 - The Overview of Kserve.
 
 3.2.2 The Architecture of Kserve
-+++++++++++
+++++++++++++++++++++++++++++++++
 
 [To do]
 
 Control Plane
-^^^^^^^^^^^^
+^^^^^^^^^^^^^
 
 Responsible for reconciling the InferenceService custom resources. It creates the Knative serverless deployment for predictor, transformer, explainer to 
 enable autoscaling based on incoming request workload including scaling down to zero when no traffic is received.
@@ -85,8 +85,8 @@ The Kserve data plane architecture is described as figure 4.
 
 
 3.2.3 KServe's Services and Features [To do]
-+++++++++++
- 
+++++++++++++++++++++++++++++++++++++++++++++
+
 Single Model Serving
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -94,46 +94,46 @@ Multi Model Serving
 ^^^^^^^^^^^^^^^^^^^^
 
 Deploy InferenceService with Transformers
-^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Deploy InferenceService with Explainer
-^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Deploy InferenceService with storage
-^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Model Monitoring
-^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
 
 Autoscaling
-^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^
 
 Request Batching
-^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
 
 Payload Logging
-^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 Kafka
-^^^^^^^^
+^^^^^
 
 
 3.2 KServe Using
-----------
+----------------
 
 3.2.1 Environments
-+++++++++++++++
+++++++++++++++++++
 
 .. csv-table:: Table 1: Environment settings
    :header: "Cluster", "Kubeflow", "KFServing", "Demo Link" 
    :widths: 15, 10, 10, 15
 
-   "AWS EKS with kubernetes 1.8", kubeflow 1.2, KFserving v0.4.1, `Demo link <http://549e5b50-istiosystem-istio-2af2-834352904.us-west-1.elb.amazonaws.com/dex/auth/local?req=itknagh4dq35xqbe5egxbsmid>`_ 
-   "OpenShift with kubernetes 1.8", kubeflow 1.4, KFserving v0.6.0, `Demo Link <https://console-openshift-console.apps.ocp4-cluster-001.liuqi.io/k8s/cluster/projects>`_
-   "vSphere TKG with kubernetes 1.8", kubeflow 1.4, KFserving v0.6.0, `Demo Link <http://127.0.0.1:8080/?ns=kubeflow-user-example-com>`_
+   "AWS EKS with kubernetes 1.8", kubeflow 1.2, KFserving v0.4.1, `Demo link 1 <http://549e5b50-istiosystem-istio-2af2-834352904.us-west-1.elb.amazonaws.com/dex/auth/local?req=itknagh4dq35xqbe5egxbsmid>`_ 
+   "OpenShift with kubernetes 1.8", kubeflow 1.4, KFserving v0.6.0, `Demo Link 2 <https://console-openshift-console.apps.ocp4-cluster-001.liuqi.io/k8s/cluster/projects>`_
+   "vSphere TKG with kubernetes 1.8", kubeflow 1.4, KFserving v0.6.0, `Demo Link 3 <http://127.0.0.1:8080/?ns=kubeflow-user-example-com>`_
 
 3.2.2 Setup and Applications on OpenShift
-+++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++
 [To do]
 
 
@@ -141,7 +141,7 @@ Kafka
 +++++++++++++++++++++++++++++++++++++++++++
 
 Login vSphere TKG
-^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
     :linenos:
@@ -158,7 +158,7 @@ Applications on vSphere TKG
 
 * Single Model InferenceService:
 
-.. code-block:: bash
+.. code-block:: console
     :linenos:
 
     # Deploy a model inferenceservice [demo: sklearn-iris <sert a link>]
@@ -198,22 +198,19 @@ Applications on vSphere TKG
     $ inferenceservice.serving.kserve.io/sklearn-iris created
 
 
-* Deploy InferenceService with Cloud/PVC storage:
-[To do]
+* Deploy InferenceService with Cloud/PVC storage: [To do]
 
-* Using KServe Python SDK:
-[To do]
-
+* Using KServe Python SDK: [To do]
 
 
 3.3 KServe Extension [advance]
-----------------
+------------------------------
 
-3.3.1 Kserve Python SDK 
-++++++++++++++++++++++++
+3.3.1 Kserve Python SDK
++++++++++++++++++++++++
 
 Overview
-^^^^^^^^^^^^^^^^^^
+^^^^^^^^
 
 Python SDK for KFServing Server and Client
 
