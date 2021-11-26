@@ -1,13 +1,11 @@
 Welcome to Kubeflow on vSphere's documentation!
 ===============================================
 
-**Lumache** (/lu'make/) is a Python library for cooks and food lovers
-that creates recipes mixing random ingredients.
-It pulls data from the `Open Food Facts database <https://world.openfoodfacts.org/>`_
-and offers a *simple* and *intuitive* API.
+This project hosts the documents on how to deploy, manage and use Kubeflow
+on vSphere and multi-clouds platforms. blah-blah-blah
 
-Check out the usage section for further information, including
-how to `installation` the project.
+Check out the following sections for further information, including
+how to deploy, manage and use Kubeflow.
 
 .. note::
 
@@ -17,6 +15,7 @@ Contents
 --------
 
 .. toctree::
+   :maxdepth: 2
 
    prerequisite
    installation
