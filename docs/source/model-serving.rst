@@ -11,19 +11,32 @@ Model Serving Basics
 Background
 ++++++++++
 
-XXX
+Most of the attention paid to machine learning has been devoted to algorithm development.
+However, models are not created for the sake of their creation, they are created
+to be put into production. Usually when people talk about taking a model “to
+production,” they mean performing inference. A complete inference solution seeks to provide serving, 
+monitoring, and updating functionality. This chapter will focus on the model serving, there are advantages 
+about model serving as following,
+
+* Helping to standardize model serving across orgs with unified data plane and pre-built model servers
+* A single way to deploy, monitor inference services/server, and scale inference workload
+* Dramatically shortening time for data scientists to deploy models to production
 
 Overview
 ++++++++
 
-.. figure:: ./figs/model-serving-architecture.png
-   :width: 1024
-   :scale: 50%
+Machine learning model inference is the process of taking an existing trained model and 
+using new data as input to produce model output such as a classification (e.g., “label”), 
+or a continuous real-valued number from a regression model (e.g., “house price”). 
+The Figure1 shows the architecture of the model inference, 
+
+.. figure:: ./figs/model-inference.png
+   :width: 900
+   :scale: 70%
    :align: center
 
    Figure 1 - The Workflow of Model Serving.
 
-XXX
 
 KServe Basics
 -------------
@@ -44,8 +57,6 @@ and server configuration to bring cutting edge serving features like GPU Autosca
 
 Architecture
 ++++++++++++
-
-XXX
 
 Control Plane
 ^^^^^^^^^^^^^
@@ -86,7 +97,6 @@ The Kserve data plane architecture is described as figure 4.
 KServe's Services and Features
 ++++++++++++++++++++++++++++++
 
-XXX
 
 * Single Model Serving
 * Multi Model Serving
@@ -110,14 +120,9 @@ Environments
    :header: "Cluster", "Kubeflow", "KFServing", "Demo Link" 
    :widths: 15, 10, 10, 15
 
-   "AWS EKS with kubernetes 1.8", kubeflow 1.2, KFserving v0.4.1, `Demo link 1 <http://549e5b50-istiosystem-istio-2af2-834352904.us-west-1.elb.amazonaws.com/dex/auth/local?req=itknagh4dq35xqbe5egxbsmid>`_ 
+   "AWS EKS with kubernetes 1.8", kubeflow 1.2, KFserving v0.4.1, `Demo Link 1 <http://549e5b50-istiosystem-istio-2af2-834352904.us-west-1.elb.amazonaws.com/dex/auth/local?req=itknagh4dq35xqbe5egxbsmid>`_ 
    "OpenShift with kubernetes 1.8", kubeflow 1.4, KFserving v0.6.0, `Demo Link 2 <https://console-openshift-console.apps.ocp4-cluster-001.liuqi.io/k8s/cluster/projects>`_
    "vSphere TKG with kubernetes 1.8", kubeflow 1.4, KFserving v0.6.0, `Demo Link 3 <http://127.0.0.1:8080/?ns=kubeflow-user-example-com>`_
-
-Setup and Applications on OpenShift
-+++++++++++++++++++++++++++++++++++
-
-XXX
 
 
 Setup and Applications on vSphere TKG
@@ -141,47 +146,91 @@ Applications on vSphere TKG
 
 * Single Model InferenceService:
 
-.. code-block:: console
+.. code-block:: bash
    :linenos:
 
-   # Deploy a model inferenceservice [demo: sklearn-iris <sert a link>]
-   kubectl apply -f sklearn.yaml
-   Output
+   # Deploy a model inferenceservice [demo: <sert a link>]
+   kubectl apply -f sklearn.yaml -n kubeflow-user-example-com
+   # Output
    $ inferenceservice.serving.kserve.io/sklearn-iris created
-
+   
    # Run a prediction with curl
    MODEL_NAME=sklearn-iris
    INPUT_PATH=@./iris-input.json
-   SESSION=[login your kubeflow ui find the request header' Cookie <https://developer.chrome.com/docs/devtools/storage/cookies/>]
+   SESSION=[login your kubeflow ui find the request header Cookie]
    SERVICE_HOSTNAME=$(kubectl get -n kfserving-samples inferenceservice ${MODEL_NAME} -o jsonpath='{.status.url}' | cut -d "/" -f 3)
-   curl -v -H "Host: ${SERVICE_HOSTNAME}" -H "Cookie: authservice_session=${SESSION}" http://127.0.0.1:8080/v1/models/${MODEL_NAME}:predict -d ${INPUT_PATH}
+   curl -v -H "Host: ${SERVICE_HOSTNAME}" -H "Cookie: authservice_session=${SESSION}" http://127.0.0.1:8080/v1/models/${MODEL_NAME}:predict -d ${INPUT_PATH} 
+   # Output
+   *   Trying 127.0.0.1:8080...
+   * TCP_NODELAY set
+   * Connected to 127.0.0.1 (127.0.0.1) port 8080 (#0)
+   > POST /v1/models/sklearn-iris:predict HTTP/1.1
+   > Host: sklearn-iris.kubeflow-user-example-com.example.com
+   > User-Agent: curl/7.67.0
+   > Accept: */*
+   > Cookie: authservice_session=MTYzNzc0NjkzOXxOd3dBTkVveU16Y3pXa0l6UkVKRVVGSkRWMVpSU2xveVIxQlZTRk0xUzBKWFFraEhNa2hFVkZaTVNGSlJURVJSVDA1TFJVcFFWVkU9fEFCFhhb2MHqcysV7xOCPIYkbgvA41mGoWRhb8e4waLa
+   > Content-Length: 76
+   > Content-Type: application/x-www-form-urlencoded
+   >
+   * upload completely sent off: 76 out of 76 bytes
+   * Mark bundle as not supporting multiuse
+   < HTTP/1.1 200 OK
+   < content-length: 23
+   < content-type: application/json; charset=UTF-8
+   < date: Wed, 24 Nov 2021 17:29:14 GMT
+   < server: istio-envoy
+   < x-envoy-upstream-service-time: 30
+   <
+   * Connection #0 to host 127.0.0.1 left intact
+   {"predictions": [1, 1]}   
+
+
+There are the supported ML frameworks and fuctions in KServe: 
 
 .. csv-table:: Table 2: Out-of-the-box Predictor
-   :header: "Model Name", "Verification", "Description"
-   :widths: 15, 10, 30
+   :header: "Model Name", "Verification", "Performance"
+   :widths: 15, 15, 20
 
-   "Sklearn", "Pass", "On a stick!"
-   "Tensorflow", "Pass", "If we took the bones out,"
-   "PyTorch", "Pass", "On a stick!"
-   "Paddle", "Pass", "On a stick!"
-   "XGBoost", "Pass", "On a stick!"
-   "LightGBM", "Pass", "On a stick!"
-   "Transformer", "Not test", "On a stick!"
-   "Rollout", "Pass", "On a stick!"
+   "Sklearn", "Pass", "xxx"
+   "Tensorflow", "Pass", "xxx"
+   "PyTorch", "Pass", "xxx"
+   "Paddle", "Pass", "xxx"
+   "XGBoost", "Pass", "xxx"
+   "LightGBM", "Pass", "xxx"
+   "Rollout", "Pass", "xxx"
+   "Transformer", "Not test", "xxx"
+   "and so on", "...", "..."
 
-* Custom Model InferenceService: XXX
+* Custom Model InferenceService: 
 
 .. code-block:: bash
    :linenos:
 
-   # Build a model server with docker ➡️ Create the InferenceService with yaml file ➡️  Run a prediction ➡️ Delete the InferenceService
-   kubectl apply -f sklearn.yaml
-   Output
+   # Run the training models on your local machine and server with kfserving.KFModel 
+   #[demo: insert a link]   
+   # Build a model server with docker 
+   docker build -t {username}/kfserving-custom-model ./model-server
+   # Push the container to docker registry
+   docker push {username}/kfserving-custom-model
+   
+   # Create the InferenceService with yaml file 
+   kubectl apply -f custom.yaml
+   # Output
    $ inferenceservice.serving.kserve.io/sklearn-iris created
+   # Run a prediction
+
+
+* Using KServe Python SDK: XXX
+
+
 
 * Deploy InferenceService with Cloud/PVC storage: XXX
 
-* Using KServe Python SDK: XXX
+
+Setup and Applications on OpenShift
++++++++++++++++++++++++++++++++++++
+
+XXX
 
 
 Advanced KServe
