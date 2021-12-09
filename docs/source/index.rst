@@ -17,6 +17,15 @@ Contents
 .. toctree::
    :maxdepth: 2
 
-   prerequisite
+   introduction 
    installation
+   auth-security
+   notebook
+   experiment
+   data-preprocessing
+   metadata-artifacts
+   training
+   tuning
    model-serving
+   pipeline
+   conclusion
