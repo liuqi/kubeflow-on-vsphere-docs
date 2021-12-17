@@ -1,14 +1,8 @@
-Introduction to MLOps
-=====================
+Introduction
+============
 
-MLOps
------
+.. toctree::
+   :maxdepth: 2
 
-Design and Architecture of ML Platform
---------------------------------------
-
-Cloud Native Storage Support (XXX)
-----------------------------------
-
-Monitoring and Visualization (XXX)
-----------------------------------
+   MLOps
+   Kubeflow
