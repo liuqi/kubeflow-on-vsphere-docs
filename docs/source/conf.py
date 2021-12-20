@@ -2,7 +2,7 @@
 
 # -- Project information
 
-project = 'Kubeflow on vSphere'
+project = 'MLOps on vSphere'
 copyright = '2021, VMware'
 author = 'VMware'
 
