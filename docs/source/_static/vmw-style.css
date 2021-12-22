@@ -97,7 +97,7 @@
 
     /* omni-style */
     --sidebar-color: #ffffff;
-    /* --sidebar-alt-color: #333333; */
+    --sidebar-alt-color: #333333;
     --sidebar-headline-color: #76b900;
     --sidebar-text-color: #666666;
 
@@ -504,15 +504,15 @@ footer p
 }
 
 /* add nvidia logo (like www.nvidia.com) */
-footer p:first-child::before
-{
-    content: url(../_static/NVIDIA-LogoBlack.svg);
-    display: block;
-    width: 110px;
-    margin: 0px;
-    position: relative;
-    left: -9px;
-}
+/* footer p:first-child::before */
+/* { */
+/*     content: url(../_static/NVIDIA-LogoBlack.svg); */
+/*     display: block; */
+/*     width: 110px; */
+/*     margin: 0px; */
+/*     position: relative; */
+/*     left: -9px; */
+/* } */
 
 /* fun role for self-made footnotes */
 .asterisks
