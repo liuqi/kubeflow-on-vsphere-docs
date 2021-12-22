@@ -1,8 +1,8 @@
 Setup
 =====
 
-Prerequisite (Kubernetes Cluster Prepartion)
---------------------------------------------
+Prerequisite
+------------
 
 vSphere with Tanzu Deployment
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -323,11 +323,11 @@ Deploy on vSphere with Tanzu
         name: system:serviceaccounts:kubeflow-user-example-com
       EOF
 
-Deploy with Kubernetes Operator (XXX)
--------------------------------------
+Deploy with Kubernetes Operator
+-------------------------------
 
-Deploy with Supervisor Services on vSphere with Tanzu (XXX)
------------------------------------------------------------
+Deploy with Supervisor Services on vSphere with Tanzu
+-----------------------------------------------------
 
 Deploy on other Kubernetes Platform
 -----------------------------------

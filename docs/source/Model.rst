@@ -1,14 +1,14 @@
 Model
 =====
 
-notebook
+Notebook
 --------
 
-metadata-artifacts
+Metadata Artifacts
 ------------------
 
-training
+Training
 --------
 
-tuning
+Tuning
 ------
