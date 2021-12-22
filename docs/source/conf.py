@@ -33,3 +33,9 @@ html_theme = 'sphinx_rtd_theme'
 
 # -- Options for EPUB output
 epub_show_urls = 'footnote'
+
+html_static_path = ['_static']
+html_css_files = ["vmw-style.css"]
+
+html_logo = '_static/vm-logo.png'
+html_favicon = 'https://www.vmware.com/favicon.ico'
